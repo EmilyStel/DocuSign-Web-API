@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 using DocuSign.Dto;
 using DocuSign.Interfaces;
 using DocuSign.Models;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DocuSign.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("[controller]")]
 	[ApiController]
 	public class UserController : Controller
 	{
@@ -31,7 +32,20 @@ namespace DocuSign.Controllers
 			return Ok(user);
         }
 
-		[HttpPost]
+        [HttpGet("/users")]
+        [ProducesResponseType(200, Type = typeof(string[]))]
+        public IActionResult GetUsers()
+        {
+            List<string> userNames = _userRepository.GetUsers();
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+            return Ok(userNames);
+        }
+
+        [HttpPost]
 		[ProducesResponseType(200, Type = typeof(User))]
 		[ProducesResponseType(400)]
 		//hanDALe so that urllist will not appear in request body
@@ -56,6 +70,19 @@ namespace DocuSign.Controllers
 			//}
 			User u = _userRepository.CreateUser(user.Name, user.LastName, user.Email);
 			return Ok(u);
+        }
+
+        [HttpDelete("{name}")]
+        [ProducesResponseType(200)]
+        public IActionResult DeleteUser(string name)
+        {
+            _userRepository.DeleteUser(name);
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+            return Ok();
         }
     }
 }

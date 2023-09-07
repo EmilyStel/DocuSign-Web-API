@@ -15,8 +15,10 @@
 
   <ItemGroup>
     <None Remove="Controllers\" />
+    <None Remove="DAL\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="DAL\Interfaces\" />
   </ItemGroup>
 </Project>
