@@ -1,11 +1,16 @@
 ﻿using System;
-using DocuSign.DAL;
-
 namespace DocuSign.Dto
 {
-	public class AddURIDto
+	public class URIDto
 	{
         public required string UriName { get; set; }
         public required string URL { get; set; }
-    }
+
+        public URIDto(string URIName, string url)
+		{
+            UriName = URIName;
+            URL = url;
+        }
+	}
 }
+

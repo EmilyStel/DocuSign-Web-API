@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json;
+using System.Xml.Linq;
 using DocuSign.DAL.Interfaces;
 using DocuSign.Models;
 
@@ -23,9 +24,12 @@ namespace DocuSign.DAL
             File.WriteAllBytes(URLFilePath, JsonSerializer.SerializeToUtf8Bytes(uri));
         }
 
-        public string DeleteURLByName(string name)
+        public string DeleteURLByName(string uriName)
         {
-            throw new NotImplementedException();
+            string URIFilePath = Path.Combine(_URLStoragePath, uriName);
+            File.Delete(URIFilePath);
+
+            return uriName;
         }
 
         public URI GetURIByName(string name)

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using DocuSign.DAL;
 using DocuSign.DAL.Interfaces;
 using DocuSign.Interfaces;
@@ -25,7 +26,7 @@ namespace DocuSign.Repository
                 throw new InvalidOperationException("User does not exist");
 
             URI uri = _URIStorageMapper.GetURIByName(uriName);
-            if (uri != null) //uri exists
+            if (uri != null) //uri name exists
             {
                 if (uri.URL == url)
                 {
@@ -48,7 +49,7 @@ namespace DocuSign.Repository
                 return uri;
             }
 
-            else //uri does not exist
+            else //uri name does not exist לבדוק אם קיים אכבר אצלך יוזר!!
             {
                 uri = new(uriName, url);
                 _URIStorageMapper.CreateURL(uri);
@@ -64,24 +65,64 @@ namespace DocuSign.Repository
             }
         }
 
-        public void DeleteUserUri(string userName, string uri)
+        public void DeleteUserUri(string userName, string uriName)
         {
-            throw new NotImplementedException();
-        }
+            string userId = _userStorageMapper.GetIdByName(userName) ??
+                throw new InvalidOperationException("User does not exist");
 
+            URI uri = _URIStorageMapper.GetURIByName(uriName) ??
+                throw new InvalidOperationException("URI name does not exist");
+
+            byte[] userDataBytes = _storage.GetData(userId);
+            User deserializedUser = JsonSerializer.Deserialize<User>(userDataBytes);
+
+            if (!deserializedUser.Urls.Contains(uri.URL))
+            {
+                throw new InvalidOperationException("User does not have spicified url");
+            }
+
+            deserializedUser.Urls.Remove(uri.URL);
+
+            _storage.UpdateData(userId, JsonSerializer.SerializeToUtf8Bytes(deserializedUser));
+
+            if (uri.Users.Count == 0)
+            {
+                _URIStorageMapper.DeleteURLByName(uriName);
+            }
+        }
+         
         public List<string> GetUserUris(string userName)
         {
-            throw new NotImplementedException();
+            string userId = _userStorageMapper.GetIdByName(userName) ??
+                    throw new InvalidOperationException("User does not exist");
+
+            byte[] userDataBytes = _storage.GetData(userId);
+            User deserializedUser = JsonSerializer.Deserialize<User>(userDataBytes);
+
+            return deserializedUser.Urls;
         }
 
         public void ConnectUser(string userName, string uriName)
         {
-            throw new NotImplementedException();
-            //Process.Start(new ProcessStartInfo
-            //{
-            //    FileName = "https://www.ynet.co.il/home/0,7340,L-8,00.html",
-            //    UseShellExecute = true
-            //});
+            string userId = _userStorageMapper.GetIdByName(userName) ??
+                throw new InvalidOperationException("User does not exist");
+
+            URI uri = _URIStorageMapper.GetURIByName(uriName) ??
+                throw new InvalidOperationException("URI name does not exist");
+
+            byte[] userDataBytes = _storage.GetData(userId);
+            User deserializedUser = JsonSerializer.Deserialize<User>(userDataBytes);
+
+            if (!deserializedUser.Urls.Contains(uri.URL))
+            {
+                throw new InvalidOperationException("User does not have spicified url");
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.ynet.co.il/home/0,7340,L-8,00.html",
+                UseShellExecute = true
+            });
         }
     }
 }

@@ -35,22 +35,16 @@ namespace DocuSign.Repository
 
         public void DeleteUser(string name)
         {
-            string userId = _storageMapper.DeleteIdByName(name);
-            if (userId == null)
-            {
+            string userId = _storageMapper.DeleteIdByName(name) ??
                 throw new InvalidOperationException("User does not exist");
-            }
 
             _storage.DeleteData(userId);
         }
 
         public User GetUser(string name)
         {
-            string userId = _storageMapper.GetIdByName(name);
-            if (userId == null)
-            {
+            string userId = _storageMapper.GetIdByName(name) ??
                 throw new InvalidOperationException("User does not exist");
-            }
 
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = JsonSerializer.Deserialize<User>(userDataBytes);

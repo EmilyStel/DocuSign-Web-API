@@ -17,15 +17,13 @@ namespace DocuSign.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(200, Type = typeof(User))]
-        [ProducesResponseType(400)]
-        //hanDALe so that urllist will not appear in request body
-        public IActionResult AddUserUri([FromBody] AddURIDto body)
+        public IActionResult AddUserUri([FromBody] AddURIDto body, [FromHeader(Name = "userName")] string userName)
         {
-            //// make validation if yri name already exsits and return suitable response
+            //// change it to not return list
             try
             {
-                URI uri = _uriRepository.AddUserUri(body.UserName, body.Name, body.URL);
+                URI uri = _uriRepository.AddUserUri(userName, body.UriName, body.URL);
+                //URIDto  = new URIDto(uri.Name, uri.URL);
                 return Ok(uri);
 
             } catch(Exception e)
@@ -35,18 +33,46 @@ namespace DocuSign.Controllers
             
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(200, Type = typeof(User))]
-        //[ProducesResponseType(400)]
-        ////hanDALe so that urllist will not appear in request body
-        //public IActionResult ConnectUser([FromBody] ConnectDto URI)
-        //{
-        //    //// make validation if user already exsits and return suitable response
-        //    ///
+        [HttpDelete("{URIName}")]
+        public IActionResult DeleteUserUri(string URIName, [FromHeader(Name = "userName")] string userName)
+        {
+            try
+            {
+                _uriRepository.DeleteUserUri(userName, URIName);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-        //    _uriRepository.ConnectUser(URI.UserName, URI.URL);
-        //    return Ok();
-        //}
+        [HttpGet("/URIS")]
+        public IActionResult DeleteUserUri([FromHeader(Name = "userName")] string userName)
+        {
+            try
+            {
+                return Ok(_uriRepository.GetUserUris(userName));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("/connect")]
+        public IActionResult ConnectUser(string URL, [FromHeader(Name = "userName")] string userName)
+        {
+            try
+            {
+                _uriRepository.ConnectUser(userName, URL);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
 
