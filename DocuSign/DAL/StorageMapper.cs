@@ -18,34 +18,31 @@ namespace DocuSign.DAL
         public string GetIdByName(string name)
         {
             string idFilePath = Path.Combine(_idStoragePath, name);
-            byte[] idBytes = File.ReadAllBytes(idFilePath);
-            string userId = JsonSerializer.Deserialize<string>(idBytes);
 
-            return userId;
+            if (File.Exists(idFilePath))
+            {
+                byte[] idBytes = File.ReadAllBytes(idFilePath);
+                string userId = JsonSerializer.Deserialize<string>(idBytes);
+
+                return userId;
+            }
+
+            return null;
         }
 
         public string DeleteIdByName(string name)
         {
-            string id = GetIdByName(name);
+            string userId = GetIdByName(name);
             string idFilePath = Path.Combine(_idStoragePath, name);
             File.Delete(idFilePath);
 
-            return id;
+            return userId;
         }
 
         public void CreateUser(User user, string id)
         {
             string idFilePath = Path.Combine(_idStoragePath, user.Name);
             File.WriteAllBytes(idFilePath, JsonSerializer.SerializeToUtf8Bytes(id));
-        }
-       
-        public string GetUser(string name)
-        {
-            string idFilePath = Path.Combine(_idStoragePath, name);
-            byte[] idBytes = File.ReadAllBytes(idFilePath);
-            string id = JsonSerializer.Deserialize<string>(idBytes);
-
-            return id;
         }
 
         public List<string> GetUsers()

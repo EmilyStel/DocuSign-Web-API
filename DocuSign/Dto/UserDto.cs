@@ -1,5 +1,4 @@
-﻿using System;
-namespace DocuSign.Dto
+﻿namespace DocuSign.Dto
 {
 	public class UserDto
 	{

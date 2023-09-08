@@ -1,9 +1,6 @@
-﻿using System;
-using System.Xml.Linq;
-using DocuSign.Dto;
+﻿using DocuSign.Dto;
 using DocuSign.Interfaces;
 using DocuSign.Models;
-using DocuSign.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocuSign.Controllers
@@ -23,66 +20,55 @@ namespace DocuSign.Controllers
 		[ProducesResponseType(200, Type = typeof(User))]
 		public IActionResult GetUser(string name)
 		{
-			User user = _userRepository.GetUser(name);
-
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-			return Ok(user);
+            try
+            {
+                return Ok(_userRepository.GetUser(name));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
         }
 
         [HttpGet("/users")]
-        [ProducesResponseType(200, Type = typeof(string[]))]
+        [ProducesResponseType(200, Type = typeof(List<string>))]
         public IActionResult GetUsers()
         {
-            List<string> userNames = _userRepository.GetUsers();
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            return Ok(userNames);
+            try
+            {
+                return Ok(_userRepository.GetUsers());
+            } catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
         }
 
         [HttpPost]
 		[ProducesResponseType(200, Type = typeof(User))]
-		[ProducesResponseType(400)]
-		//hanDALe so that urllist will not appear in request body
 		public IActionResult CreateUser([FromBody] UserDto user)
 		{
-			if(user == null)
+			try
 			{
-				return BadRequest(ModelState);
-			}
-
-			// make validation if user already exsits and return suitable response
-
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			//if (!_userRepository.CreateUser(user))
-			//{
-			//	ModelState.AddModelError("", "Went wrong"); 
-			//	return StatusCode(500, ModelState);
-			//}
-			User u = _userRepository.CreateUser(user.Name, user.LastName, user.Email);
-			return Ok(u);
+                return Ok(_userRepository.CreateUser(user.Name, user.LastName, user.Email));
+            } catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
         }
 
         [HttpDelete("{name}")]
         [ProducesResponseType(200)]
         public IActionResult DeleteUser(string name)
         {
-            _userRepository.DeleteUser(name);
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            return Ok();
+            try
+            {
+                _userRepository.DeleteUser(name);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using DocuSign.Models;
+﻿using DocuSign.Models;
 
 namespace DocuSign.Interfaces
 {
@@ -7,12 +6,8 @@ namespace DocuSign.Interfaces
 	{
 		User GetUser(string Name);
         List<string> GetUsers();
-
         User CreateUser(string name, string lastName, string email);
-
         void DeleteUser(string name);
-
-        void ConnectUser(string userName, string urlDomain);
     }
 }
 

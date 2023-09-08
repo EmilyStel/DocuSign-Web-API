@@ -17,22 +17,18 @@ namespace DocuSign.Repository
             _storageMapper = storageMapper;
         }
 
-        public void ConnectUser(string userName, string urlDomain)
-        {
-            throw new NotImplementedException();
-            //Process.Start(new ProcessStartInfo
-            //{
-            //    FileName = "https://www.ynet.co.il/home/0,7340,L-8,00.html",
-            //    UseShellExecute = true
-            //});
-        }
-
         public User CreateUser(string name, string lastName, string email)
         {
-            User user = new(name, lastName, email);
-            string id = _storage.AddData(JsonSerializer.SerializeToUtf8Bytes(user));
+            string userId = _storageMapper.GetIdByName(name);
+            if (userId != null)
+            {
+                throw new InvalidOperationException("User name is already in use");
+            }
 
-            _storageMapper.CreateUser(user, id);
+            User user = new(name, lastName, email);
+            userId = _storage.AddData(JsonSerializer.SerializeToUtf8Bytes(user));
+
+            _storageMapper.CreateUser(user, userId);
 
             return user;
         }
@@ -40,13 +36,23 @@ namespace DocuSign.Repository
         public void DeleteUser(string name)
         {
             string userId = _storageMapper.DeleteIdByName(name);
+            if (userId == null)
+            {
+                throw new InvalidOperationException("User does not exist");
+            }
+
             _storage.DeleteData(userId);
         }
 
         public User GetUser(string name)
         {
-            string id = _storageMapper.GetUser(name);
-            byte[] userDataBytes = _storage.GetData(id);
+            string userId = _storageMapper.GetIdByName(name);
+            if (userId == null)
+            {
+                throw new InvalidOperationException("User does not exist");
+            }
+
+            byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = JsonSerializer.Deserialize<User>(userDataBytes);
 
             return deserializedUser;

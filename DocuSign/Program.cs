@@ -1,5 +1,6 @@
 ﻿
 using DocuSign.DAL;
+using DocuSign.DAL.Interfaces;
 using DocuSign.Interfaces;
 using DocuSign.Repository;
 
@@ -15,8 +16,12 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IURIRepository, URIRepository>();
         builder.Services.AddScoped<IStorage, Storage>();
         builder.Services.AddScoped<IStorageMapper, StorageMapper>();
+        builder.Services.AddScoped<IURIStorageMapper, URIStorageMapper>();
+
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

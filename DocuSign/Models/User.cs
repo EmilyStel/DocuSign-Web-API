@@ -1,5 +1,4 @@
-﻿using System;
-namespace DocuSign.Models
+﻿namespace DocuSign.Models
 {
 	public class User
 	{

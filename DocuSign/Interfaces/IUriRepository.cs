@@ -1,12 +1,12 @@
-﻿using System;
+﻿using DocuSign.Models;
+
 namespace DocuSign.Interfaces
 {
-	public interface IUriRepository
+	public interface IURIRepository
     {
         List<string> GetUserUris(string userName);
-
-        Uri AddUserUri(string userName, string uri, string url);
-
+        URI AddUserUri(string userName, string uriName, string url);
         void DeleteUserUri(string userName, string uri);
+        public void ConnectUser(string userName, string uriName);
     }
 }
