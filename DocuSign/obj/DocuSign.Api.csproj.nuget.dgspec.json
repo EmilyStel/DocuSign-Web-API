@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "/Users/emily/Documents/Emily/DocuSign/DocuSign.csproj": {}
+    "/Users/emily/Documents/Emily/DocuSign/DocuSign.Api.csproj": {}
   },
   "projects": {
     "/Users/emily/Documents/Emily/BL/BL.csproj": {
@@ -121,12 +121,12 @@
         }
       }
     },
-    "/Users/emily/Documents/Emily/DocuSign/DocuSign.csproj": {
+    "/Users/emily/Documents/Emily/DocuSign/DocuSign.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/emily/Documents/Emily/DocuSign/DocuSign.csproj",
-        "projectName": "DocuSign",
-        "projectPath": "/Users/emily/Documents/Emily/DocuSign/DocuSign.csproj",
+        "projectUniqueName": "/Users/emily/Documents/Emily/DocuSign/DocuSign.Api.csproj",
+        "projectName": "DocuSign.Api",
+        "projectPath": "/Users/emily/Documents/Emily/DocuSign/DocuSign.Api.csproj",
         "packagesPath": "/Users/emily/.nuget/packages/",
         "outputPath": "/Users/emily/Documents/Emily/DocuSign/obj/",
         "projectStyle": "PackageReference",

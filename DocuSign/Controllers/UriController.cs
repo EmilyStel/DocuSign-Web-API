@@ -1,7 +1,10 @@
 ﻿using System.Dynamic;
 using DocuSign.Dto;
-using DocuSign.Interfaces;
-using DocuSign.Models;
+//using DocuSign.Interfaces;
+using Domain.Interfaces;
+
+//using DocuSign.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocuSign.Controllers
@@ -22,20 +25,10 @@ namespace DocuSign.Controllers
         {
             try
             {
-                URI uri = _uriRepository.AddUserUri(userName, body.UriName, body.URL);
-                //return Ok(c);
+                _uriRepository.AddUserUri(userName, body.UriName, body.Url);
+                AddUserUriResponse response = new AddUserUriResponse(body.Url, userName);
 
-
-                dynamic json = new ExpandoObject();
-                //json.Result = 200;
-                //json.Message = "success";
-                json.Name = uri.Name;
-                json.URL = uri.URL;
-
-                //return new JsonResult(json);
-
-                return Ok(json);
-
+                return Ok(response);
 
             } catch(Exception e)
             {

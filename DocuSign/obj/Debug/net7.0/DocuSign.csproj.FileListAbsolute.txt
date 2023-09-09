@@ -31,3 +31,9 @@
 /Users/emily/Documents/Emily/DocuSign/obj/Debug/net7.0/DocuSign.pdb
 /Users/emily/Documents/Emily/DocuSign/obj/Debug/net7.0/DocuSign.genruntimeconfig.cache
 /Users/emily/Documents/Emily/DocuSign/obj/Debug/net7.0/ref/DocuSign.dll
+/Users/emily/Documents/Emily/DocuSign/bin/Debug/net7.0/BL.dll
+/Users/emily/Documents/Emily/DocuSign/bin/Debug/net7.0/DAL.dll
+/Users/emily/Documents/Emily/DocuSign/bin/Debug/net7.0/Domain.dll
+/Users/emily/Documents/Emily/DocuSign/bin/Debug/net7.0/Domain.pdb
+/Users/emily/Documents/Emily/DocuSign/bin/Debug/net7.0/BL.pdb
+/Users/emily/Documents/Emily/DocuSign/bin/Debug/net7.0/DAL.pdb

@@ -1,6 +1,6 @@
 ﻿using DocuSign.Dto;
-using DocuSign.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Interfaces;
 
 namespace DocuSign.Controllers
 {
@@ -34,10 +34,14 @@ namespace DocuSign.Controllers
             try
             {
                 return Ok(_userRepository.GetUsers());
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return StatusCode(400, e.Message);
             }
+
+            //throw new InvalidOperationException("WTF");
+
         }
 
         [HttpPost]

@@ -1,7 +1,7 @@
-﻿
-using DocuSign.DAL;
-using DocuSign.Interfaces;
-using DocuSign.Repository;
+﻿using Domain.Interfaces;
+using DocuSign.Api.Middlware;
+using BL.Repositories;
+using DAL;
 
 namespace DocuSign;
 
@@ -25,18 +25,22 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        var app = builder.Build();
+        var app = builder.Build(); 
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
+
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+
+        //app.UseMiddleware<ExcpetionMiddlware>();
+
+        app.ConfigureExceptionHandler();
 
         app.MapControllers();
 

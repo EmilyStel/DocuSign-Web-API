@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v7.0": {
-      "DocuSign/1.0.0": {
+      "DocuSign.Api/1.0.0": {
         "dependencies": {
           "BL": "1.0.0",
           "Domain": "1.0.0",
@@ -14,7 +14,7 @@
           "Swashbuckle.AspNetCore": "6.5.0"
         },
         "runtime": {
-          "DocuSign.dll": {}
+          "DocuSign.Api.dll": {}
         }
       },
       "Microsoft.AspNetCore.OpenApi/7.0.10": {
@@ -100,7 +100,7 @@
     }
   },
   "libraries": {
-    "DocuSign/1.0.0": {
+    "DocuSign.Api/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
