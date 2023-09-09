@@ -1,7 +1,9 @@
 ﻿using Domain.Interfaces;
-using DocuSign.Api.Middlware;
 using BL.Repositories;
 using DAL;
+using DocuSign.Api;
+using DocuSign.Api.Middleware;
+using DocuSign.Api.Controllers.Filters;
 
 namespace DocuSign;
 
@@ -20,12 +22,15 @@ public class Program
         builder.Services.AddScoped<IUserStorageMapper, UserStorageMapper>();
         builder.Services.AddScoped<IURIStorageMapper, URIStorageMapper>();
 
+        builder.Services.AddControllers(options => options.Filters.Add<ErrorHandlingFilterAttribute>());
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        var app = builder.Build(); 
+        var app = builder.Build();
+
+        //app.UseMiddleware<ErrorHandlingMiddleware>();
 
         if (app.Environment.IsDevelopment())
         {
@@ -33,14 +38,11 @@ public class Program
             app.UseSwaggerUI();
         }
 
-
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
 
-        //app.UseMiddleware<ExcpetionMiddlware>();
-
-        app.ConfigureExceptionHandler();
+        //app.ConfigureExceptionHandler();
 
         app.MapControllers();
 

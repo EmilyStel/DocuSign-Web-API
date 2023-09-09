@@ -1,11 +1,13 @@
 ﻿using DocuSign.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Interfaces;
+using DocuSign.Api.Controllers.Filters;
 
 namespace DocuSign.Controllers
 {
 	[Route("/user")]
 	[ApiController]
+    [ErrorHandlingFilter]
 	public class UserController : Controller
 	{
         private readonly IUserRepository _userRepository;
@@ -40,19 +42,18 @@ namespace DocuSign.Controllers
                 return StatusCode(400, e.Message);
             }
 
-            //throw new InvalidOperationException("WTF");
-
         }
 
         [HttpPost]
 		public IActionResult CreateUser([FromBody] UserDto user)
 		{
-			try
-			{
-                return Ok(_userRepository.CreateUser(user.Name, user.LastName, user.Email));
-            } catch (Exception e)
+            try
             {
-                return StatusCode(400, e.Message);
+                return Ok(_userRepository.CreateUser(user.Name, user.LastName, user.Email));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(this.ModelState);
             }
         }
 
