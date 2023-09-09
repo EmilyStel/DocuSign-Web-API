@@ -3,11 +3,11 @@ using DocuSign.Models;
 
 namespace DocuSign.DAL
 {
-	public class StorageMapper : IStorageMapper
+	public class UserStorageMapper : IUserStorageMapper
 	{
         private readonly string _idStoragePath;
 
-        public StorageMapper()
+        public UserStorageMapper()
         {
             string tempPath = Path.GetTempPath();
             _idStoragePath = Path.Combine(tempPath, "SignServiceStorageIds");

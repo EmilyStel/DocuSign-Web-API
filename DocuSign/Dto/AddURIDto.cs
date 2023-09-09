@@ -1,7 +1,4 @@
-﻿using System;
-using DocuSign.DAL;
-
-namespace DocuSign.Dto
+﻿namespace DocuSign.Dto
 {
 	public class AddURIDto
 	{

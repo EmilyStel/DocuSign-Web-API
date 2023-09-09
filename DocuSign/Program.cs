@@ -18,7 +18,7 @@ public class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IURIRepository, URIRepository>();
         builder.Services.AddScoped<IStorage, Storage>();
-        builder.Services.AddScoped<IStorageMapper, StorageMapper>();
+        builder.Services.AddScoped<IUserStorageMapper, UserStorageMapper>();
         builder.Services.AddScoped<IURIStorageMapper, URIStorageMapper>();
 
 
@@ -38,7 +38,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 

@@ -10,13 +10,13 @@ namespace DocuSign.Repository
 	public class URIRepository : IURIRepository
 	{
         private readonly IStorage _storage;
-        private readonly IURIStorageMapper _URIStorageMapper;
-        private readonly IStorageMapper _userStorageMapper;
+        private readonly IURIStorageMapper _uriStorageMapper;
+        private readonly IUserStorageMapper _userStorageMapper;
 
-        public URIRepository(IStorage storage, IURIStorageMapper uriStorageMapper, IStorageMapper userStorageMapper)
+        public URIRepository(IStorage storage, IURIStorageMapper uriStorageMapper, IUserStorageMapper userStorageMapper)
         {
             _storage = storage;
-            _URIStorageMapper = uriStorageMapper;
+            _uriStorageMapper = uriStorageMapper;
             _userStorageMapper = userStorageMapper;
         }
 
@@ -25,16 +25,24 @@ namespace DocuSign.Repository
             string userId = _userStorageMapper.GetIdByName(userName) ??
                 throw new InvalidOperationException("User does not exist");
 
-            URI uri = _URIStorageMapper.GetURIByName(uriName);
+
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                throw new InvalidOperationException("Url is invalid");
+            }
+
+            URI uri = _uriStorageMapper.GetURIByName(uriName);
             if (uri != null) //uri name exists
             {
                 if (uri.URL == url)
                 {
-                    if (!uri.Users.Contains(userName))
+                    if (uri.Users.Contains(userName))
                     {
-                        uri.Users.Add(userName);
+                        throw new InvalidOperationException("User already added this URI");
                     }
-                    _URIStorageMapper.CreateURL(uri);
+
+                    uri.Users.Add(userName);
+                    _uriStorageMapper.CreateURL(uri);
                     byte[] userDataBytes = _storage.GetData(userId);
                     User deserializedUser = JsonSerializer.Deserialize<User>(userDataBytes);
 
@@ -49,10 +57,10 @@ namespace DocuSign.Repository
                 return uri;
             }
 
-            else //uri name does not exist לבדוק אם קיים אכבר אצלך יוזר!!
+            else
             {
                 uri = new(uriName, url);
-                _URIStorageMapper.CreateURL(uri);
+                _uriStorageMapper.CreateURL(uri);
 
                 string id = _userStorageMapper.GetIdByName(userName);
                 byte[] userDataBytes = _storage.GetData(id);
@@ -60,6 +68,7 @@ namespace DocuSign.Repository
 
                 deserializedUser.Urls.Add(url);
 
+                // move it to DAL
                 _storage.UpdateData(id, JsonSerializer.SerializeToUtf8Bytes(deserializedUser));
                 return uri;
             }
@@ -70,7 +79,7 @@ namespace DocuSign.Repository
             string userId = _userStorageMapper.GetIdByName(userName) ??
                 throw new InvalidOperationException("User does not exist");
 
-            URI uri = _URIStorageMapper.GetURIByName(uriName) ??
+            URI uri = _uriStorageMapper.GetURIByName(uriName) ??
                 throw new InvalidOperationException("URI name does not exist");
 
             byte[] userDataBytes = _storage.GetData(userId);
@@ -87,7 +96,7 @@ namespace DocuSign.Repository
 
             if (uri.Users.Count == 0)
             {
-                _URIStorageMapper.DeleteURLByName(uriName);
+                _uriStorageMapper.DeleteURLByName(uriName);
             }
         }
          
@@ -102,25 +111,24 @@ namespace DocuSign.Repository
             return deserializedUser.Urls;
         }
 
-        public void ConnectUser(string userName, string uriName)
+        public void ConnectUser(string userName, string url)
         {
             string userId = _userStorageMapper.GetIdByName(userName) ??
                 throw new InvalidOperationException("User does not exist");
 
-            URI uri = _URIStorageMapper.GetURIByName(uriName) ??
-                throw new InvalidOperationException("URI name does not exist");
-
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = JsonSerializer.Deserialize<User>(userDataBytes);
 
-            if (!deserializedUser.Urls.Contains(uri.URL))
+            if (!deserializedUser.Urls.Contains(url))
             {
                 throw new InvalidOperationException("User does not have spicified url");
             }
 
+            // add site validator
             Process.Start(new ProcessStartInfo
             {
-                FileName = "https://www.ynet.co.il/home/0,7340,L-8,00.html",
+                //FileName = "https://www.ynet.co.il/home/0,7340,L-8,00.html",
+                FileName = url,
                 UseShellExecute = true
             });
         }

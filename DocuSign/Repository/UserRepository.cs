@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using DocuSign.DAL;
 using DocuSign.Interfaces;
 using DocuSign.Models;
@@ -8,10 +9,10 @@ namespace DocuSign.Repository
 	public class UserRepository : IUserRepository
 	{
         private readonly IStorage _storage;
-        private readonly IStorageMapper _storageMapper;
+        private readonly IUserStorageMapper _storageMapper;
 
 
-        public UserRepository(IStorage storage, IStorageMapper storageMapper)
+        public UserRepository(IStorage storage, IUserStorageMapper storageMapper)
         {
             _storage = storage;
             _storageMapper = storageMapper;
@@ -23,6 +24,11 @@ namespace DocuSign.Repository
             if (userId != null)
             {
                 throw new InvalidOperationException("User name is already in use");
+            }
+
+            if (!new EmailAddressAttribute().IsValid(email))
+            {
+                throw new InvalidOperationException("Email is invalid");
             }
 
             User user = new(name, lastName, email);

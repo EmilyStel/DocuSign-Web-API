@@ -1,4 +1,5 @@
-﻿using DocuSign.Dto;
+﻿using System.Dynamic;
+using DocuSign.Dto;
 using DocuSign.Interfaces;
 using DocuSign.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,22 @@ namespace DocuSign.Controllers
         [HttpPost]
         public IActionResult AddUserUri([FromBody] AddURIDto body, [FromHeader(Name = "userName")] string userName)
         {
-            //// change it to not return list
             try
             {
                 URI uri = _uriRepository.AddUserUri(userName, body.UriName, body.URL);
-                //URIDto  = new URIDto(uri.Name, uri.URL);
-                return Ok(uri);
+                //return Ok(c);
+
+
+                dynamic json = new ExpandoObject();
+                //json.Result = 200;
+                //json.Message = "success";
+                json.Name = uri.Name;
+                json.URL = uri.URL;
+
+                //return new JsonResult(json);
+
+                return Ok(json);
+
 
             } catch(Exception e)
             {
@@ -47,7 +58,7 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpGet("/URIS")]
+        [HttpGet("/list")]
         public IActionResult DeleteUserUri([FromHeader(Name = "userName")] string userName)
         {
             try
@@ -60,12 +71,12 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpPost("/connect")]
-        public IActionResult ConnectUser(string URL, [FromHeader(Name = "userName")] string userName)
+        [HttpPost("/{url}")]
+        public IActionResult ConnectUser(string url, [FromHeader(Name = "userName")] string userName)
         {
             try
             {
-                _uriRepository.ConnectUser(userName, URL);
+                _uriRepository.ConnectUser(userName, url);
                 return Ok();
             }
             catch (Exception e)
@@ -75,4 +86,3 @@ namespace DocuSign.Controllers
         }
     }
 }
-

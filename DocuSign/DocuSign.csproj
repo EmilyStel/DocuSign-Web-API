@@ -16,9 +16,11 @@
   <ItemGroup>
     <None Remove="Controllers\" />
     <None Remove="DAL\Interfaces\" />
+    <None Remove="ExceptionHandler\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="DAL\Interfaces\" />
+    <Folder Include="ExceptionHandler\" />
   </ItemGroup>
 </Project>
