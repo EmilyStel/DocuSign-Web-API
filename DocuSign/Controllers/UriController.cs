@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DocuSign.Controllers
 {
-    [Route("[controller]")]
+    [Route("/uri")]
     [ApiController]
     public class URIController : Controller
 	{
@@ -44,12 +44,12 @@ namespace DocuSign.Controllers
             
         }
 
-        [HttpDelete("{URIName}")]
-        public IActionResult DeleteUserUri(string URIName, [FromHeader(Name = "userName")] string userName)
+        [HttpDelete("{uriName}")]
+        public IActionResult DeleteUserUri([FromRoute] string uriName, [FromHeader(Name = "userName")] string userName)
         {
             try
             {
-                _uriRepository.DeleteUserUri(userName, URIName);
+                _uriRepository.DeleteUserUri(userName, uriName);
                 return Ok();
             }
             catch (Exception e)
@@ -58,7 +58,7 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpGet("/list")]
+        [HttpGet("/uris")]
         public IActionResult DeleteUserUri([FromHeader(Name = "userName")] string userName)
         {
             try
@@ -71,13 +71,13 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpPost("/{url}")]
-        public IActionResult ConnectUser(string url, [FromHeader(Name = "userName")] string userName)
+        [HttpPost("{url}")]
+        public IActionResult ConnectUser([FromRoute] string url, [FromHeader(Name = "userName")] string userName)
         {
             try
             {
                 _uriRepository.ConnectUser(userName, url);
-                return Ok();
+                return Ok(url);
             }
             catch (Exception e)
             {

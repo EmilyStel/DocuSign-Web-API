@@ -1,11 +1,10 @@
 ﻿using DocuSign.Dto;
 using DocuSign.Interfaces;
-using DocuSign.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocuSign.Controllers
 {
-	[Route("[controller]")]
+	[Route("/user")]
 	[ApiController]
 	public class UserController : Controller
 	{
@@ -16,13 +15,12 @@ namespace DocuSign.Controllers
             _userRepository = userRepository;
         }
 
-		[HttpGet("{name}")]
-		[ProducesResponseType(200, Type = typeof(User))]
-		public IActionResult GetUser(string name)
+		[HttpGet("{userName}")]
+		public IActionResult GetUser([FromRoute] string userName)
 		{
             try
             {
-                return Ok(_userRepository.GetUser(name));
+                return Ok(_userRepository.GetUser(userName));
             }
             catch (Exception e)
             {
@@ -31,7 +29,6 @@ namespace DocuSign.Controllers
         }
 
         [HttpGet("/users")]
-        [ProducesResponseType(200, Type = typeof(List<string>))]
         public IActionResult GetUsers()
         {
             try
@@ -44,7 +41,6 @@ namespace DocuSign.Controllers
         }
 
         [HttpPost]
-		[ProducesResponseType(200, Type = typeof(User))]
 		public IActionResult CreateUser([FromBody] UserDto user)
 		{
 			try
@@ -56,13 +52,12 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpDelete("{name}")]
-        [ProducesResponseType(200)]
-        public IActionResult DeleteUser(string name)
+        [HttpDelete("{userName}")]
+        public IActionResult DeleteUser([FromRoute] string userName)
         {
             try
             {
-                _userRepository.DeleteUser(name);
+                _userRepository.DeleteUser(userName);
                 return Ok();
             }
             catch (Exception e)

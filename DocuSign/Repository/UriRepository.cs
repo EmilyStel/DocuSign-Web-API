@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using DocuSign.DAL;
-using DocuSign.DAL.Interfaces;
 using DocuSign.Interfaces;
 using DocuSign.Models;
 
@@ -124,10 +123,9 @@ namespace DocuSign.Repository
                 throw new InvalidOperationException("User does not have spicified url");
             }
 
-            // add site validator
             Process.Start(new ProcessStartInfo
             {
-                //FileName = "https://www.ynet.co.il/home/0,7340,L-8,00.html",
+                //FileName = "https://www.google.com/search?sca_esv=563961401&rlz=1C5CHFA_enIL993IL1013&sxsrf=AB5stBhXjOR5Neqeel8Tk5VBZIu8Cb6tMQ:1694249539812&q=%D7%A1%D7%9E%D7%99%D7%99%D7%9C%D7%99&tbm=isch&source=lnms&sa=X&ved=2ahUKEwibruyvk52BAxUJ66QKHdT1C1sQ0pQJegQIDxAB&biw=1512&bih=750&dpr=2#imgrc=T8uoxiUrd1u0fM",
                 FileName = url,
                 UseShellExecute = true
             });

@@ -1,4 +1,5 @@
 ﻿<Properties StartupConfiguration="{517384CF-FAA3-4567-8F7C-6B044E6FF65E}|https">
-  <MonoDevelop.Ide.ItemProperties.DocuSign FirstBuild="True" />
+  <MonoDevelop.Ide.ItemProperties.DocuSign PreferredExecutionTarget="/Applications/Safari.app" />
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.DAL FirstBuild="True" />
 </Properties>

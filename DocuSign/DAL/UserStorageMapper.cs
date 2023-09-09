@@ -4,7 +4,7 @@ using DocuSign.Models;
 namespace DocuSign.DAL
 {
 	public class UserStorageMapper : IUserStorageMapper
-	{
+    {
         private readonly string _idStoragePath;
 
         public UserStorageMapper()

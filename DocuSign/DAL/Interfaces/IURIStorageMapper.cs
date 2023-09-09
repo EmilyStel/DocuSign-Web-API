@@ -1,9 +1,9 @@
 ﻿using DocuSign.Models;
 
-namespace DocuSign.DAL.Interfaces
+namespace DocuSign.DAL
 {
-	public interface IURIStorageMapper
-	{
+    public interface IURIStorageMapper
+    {
         public URI GetURIByName(string name);
         public string DeleteURLByName(string name);
         public void CreateURL(URI uri);
