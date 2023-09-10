@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using DocuSign.Interfaces;
 using DocuSign.Models;
@@ -11,18 +11,18 @@ namespace BL.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly IStorage _storage;
-        private readonly IUserStorageMapper _storageMapper;
+        private readonly IUserStorageMapper _userStorageMapper;
 
 
         public UserRepository(IStorage storage, IUserStorageMapper storageMapper)
         {
             _storage = storage;
-            _storageMapper = storageMapper;
+            _userStorageMapper = storageMapper;
         }
 
         public User CreateUser(string name, string lastName, string email)
         {
-            string? userId = _storageMapper.GetIdByName(name);
+            string? userId = _userStorageMapper.GetIdByName(name);
 
             if (userId != null)
             {
@@ -37,14 +37,14 @@ namespace BL.Repositories
             User user = new(name, lastName, email);
             userId = _storage.AddData(JsonSerializer.SerializeToUtf8Bytes(user));
 
-            _storageMapper.CreateUser(user, userId);
+            _userStorageMapper.CreateUser(user, userId);
 
             return user;
         }
 
         public void DeleteUser(string name)
         {
-            string userId = _storageMapper.DeleteIdByName(name) ??
+            string userId = _userStorageMapper.DeleteIdByName(name) ??
                 throw new NotFoundException(Entities.USER);
 
             _storage.DeleteData(userId);
@@ -52,7 +52,7 @@ namespace BL.Repositories
 
         public User GetUser(string name)
         {
-            string userId = _storageMapper.GetIdByName(name) ??
+            string userId = _userStorageMapper.GetIdByName(name) ??
                 throw new NotFoundException(Entities.USER);
 
             byte[] userDataBytes = _storage.GetData(userId);
@@ -62,7 +62,7 @@ namespace BL.Repositories
 
         public List<string> GetUsers()
         {
-            return _storageMapper.GetUsers();
+            return _userStorageMapper.GetUsers();
         }
     }
 }

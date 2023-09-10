@@ -36,7 +36,7 @@ namespace DocuSign.Controllers
             return Ok(_uriRepository.GetUserUris(userName));
         }
 
-        [HttpPost("{url}")]
+        [HttpPost("/{url}")]
         public IActionResult ConnectUser([FromRoute] string url, [FromHeader(Name = "userName")] string userName)
         {
             _uriRepository.ConnectUser(userName, url);

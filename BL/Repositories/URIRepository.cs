@@ -5,6 +5,7 @@ using DocuSign.Models;
 using Domain.Exceptions;
 using Domain.Constants;
 using Domain.Interfaces;
+using System.Web;
 
 namespace BL.Repositories
 {
@@ -58,6 +59,7 @@ namespace BL.Repositories
             else
             {
                 uri = new(uriName, url);
+                uri.Users.Add(userName);
                 _uriStorage.CreateUri(uri);
 
                 string id = _userStorageMapper.GetIdByName(userName) ??
@@ -116,17 +118,20 @@ namespace BL.Repositories
             string userId = _userStorageMapper.GetIdByName(userName) ??
                 throw new NotFoundException(Entities.USER);
 
+            string decodedUrl = HttpUtility.UrlDecode(url) ??
+                throw new InvalidException(Entities.URL);
+
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = User.Deserialize(userDataBytes);
 
-            if (!deserializedUser.Urls.Contains(url))
+            if (!deserializedUser.Urls.Contains(decodedUrl))
             {
                 throw new NotFoundException(Entities.URL);
             }
 
             Process.Start(new ProcessStartInfo
             {
-                FileName = url,
+                FileName = decodedUrl,
                 UseShellExecute = true
             });
         }
