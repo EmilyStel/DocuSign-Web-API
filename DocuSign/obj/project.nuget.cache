@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ktlf3Cv8OUb9LEWdJh9dhknQjBXgGJ8LpxfRMvMDlPubGwn+s4n3pWwb8wuEYgrHkxc2YAqiILZrCC8kGFPuuw==",
+  "dgSpecHash": "5jONpnGxHRCHRg9lKUVEABxZPsNuBwEW9goN80F6kt/DP1AbH4embF9/BELzSx0YZ2NSdG1C+q64VDutNgEVqQ==",
   "success": true,
-  "projectFilePath": "/Users/emily/Documents/Emily/DocuSign/DocuSign.Api.csproj",
+  "projectFilePath": "/Users/emily/Documents/Emily/DocuSign/DocuSign.csproj",
   "expectedPackageFiles": [
     "/Users/emily/.nuget/packages/microsoft.aspnetcore.openapi/7.0.10/microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
     "/Users/emily/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",

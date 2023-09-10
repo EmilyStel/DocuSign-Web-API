@@ -1,6 +1,6 @@
 ﻿using DocuSign.Dto;
-using Domain.Interfaces;
-using Domain.Models;
+using DocuSign.Interfaces;
+using DocuSign.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocuSign.Controllers
@@ -45,7 +45,7 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpGet("/uris")]
+        [HttpGet("/uri")]
         public IActionResult GetUserUris([FromHeader(Name = "userName")] string userName)
         {
             try

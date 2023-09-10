@@ -1,13 +1,12 @@
 ﻿using DocuSign.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Interfaces;
-using DocuSign.Api.Controllers.Filters;
+using DocuSign.Interfaces;
+using Domain.Exceptions;
 
 namespace DocuSign.Controllers
 {
 	[Route("/user")]
 	[ApiController]
-    [ErrorHandlingFilter]
 	public class UserController : Controller
 	{
         private readonly IUserRepository _userRepository;
@@ -32,18 +31,10 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpGet("/users")]
+        [HttpGet("/user")]
         public IActionResult GetUsers()
         {
-            try
-            {
-                return Ok(_userRepository.GetUsers());
-            }
-            catch (Exception e)
-            {
-                return StatusCode(400, e.Message);
-            }
-
+            return Ok(_userRepository.GetUsers()); 
         }
 
         [HttpPost]

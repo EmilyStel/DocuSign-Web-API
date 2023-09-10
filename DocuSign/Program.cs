@@ -1,9 +1,9 @@
-﻿using Domain.Interfaces;
+﻿using DocuSign.Interfaces;
 using BL.Repositories;
 using DAL;
-using DocuSign.Api.Controllers.Filters;
 using DAL.Intefaces;
 using Serilog;
+using DocuSign.Middleware;
 
 namespace DocuSign;
 
@@ -21,8 +21,6 @@ public class Program
         builder.Services.AddSingleton<IUserStorageMapper, UserStorageMapper>();
         builder.Services.AddSingleton<IURIStorageMapper, URIStorageMapper>();
 
-        builder.Services.AddControllers(options => options.Filters.Add<ErrorHandlingFilterAttribute>());
-
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -34,7 +32,8 @@ public class Program
 
         var app = builder.Build();
 
-        //app.UseMiddleware<ErrorHandlingMiddleware>();
+        app.UseMiddleware<ErrorHandlingMiddleware>();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

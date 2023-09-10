@@ -1,10 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Http.Json;
+﻿using System.Net;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Domain.Exceptions;
 
-namespace DocuSign.Api.Middleware
+namespace DocuSign.Middleware
 {
 	public class ErrorHandlingMiddleware
 	{
@@ -17,26 +15,65 @@ namespace DocuSign.Api.Middleware
 
 		public async Task Invoke(HttpContext context)
 		{
-            try
+			try
 			{
 				await _next(context);
 			}
-			catch(Exception ex)
+			catch (Exception exception)
 			{
-				await HandleExceptionAsync(context, ex);
-			}
-		}
+				//await HandleExceptionAsync(context, ex);
 
-		private static Task HandleExceptionAsync(HttpContext context, Exception exception)
-		{
-			var code = HttpStatusCode.InternalServerError;
-			var result = JsonSerializer.Serialize(new { error = "OOOO" });
-			context.Response.ContentType = "application/json";
-			context.Response.StatusCode = 500;
-			return context.Response.WriteAsync(result);
-		}
+				context.Response.ContentType = "application/json";
+				var result = JsonSerializer.Serialize(new { error = exception.Message });
 
+                switch (exception)
+				{
+					case NotFoundException:
+						context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+						break;
 
+					case AlreadyExistException:
+						context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+						break;
+					case InvalidException:
+						context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+						break;
+					default:
+						context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+						break;
+				}
+
+				await context.Response.WriteAsync(result);
+            }
+        }
+
+		//private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+		//{
+  //          context.Response.ContentType = "application/json";
+  //          var result = JsonSerializer.Serialize(new { error = exception.Message });
+
+		//	if (exception is NotFoundException)
+		//	{
+		//		context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+		//	}
+
+		//	else if (exception is AlreadyExistException)
+		//	{
+		//		context.Response.StatusCode = 409;
+		//	}
+
+		//	else if (exception is InvalidException)
+		//	{
+		//		context.Response.StatusCode = 409;
+  //          }
+
+		//	else
+		//	{
+		//		context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+		//	}
+
+  //          return context.Response.WriteAsync(result);
+		//}
     }
 }
 
