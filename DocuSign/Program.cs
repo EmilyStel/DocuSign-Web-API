@@ -1,10 +1,9 @@
 ﻿using DocuSign.Interfaces;
 using BL.Repositories;
 using DAL;
-using DAL.Intefaces;
 using Serilog;
 using DocuSign.Middleware;
-
+using Domain.Interfaces;
 
 namespace DocuSign;
 public class Program

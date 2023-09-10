@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using DAL.Intefaces;
 using DocuSign.Interfaces;
 using DocuSign.Models;
 using Domain.Exceptions;
 using Domain.Constants;
+using Domain.Interfaces;
 
 namespace BL.Repositories
 {

@@ -2,16 +2,16 @@
 using BL.Repositories;
 using Castle.Core.Logging;
 using DAL;
-using DAL.Intefaces;
 using DocuSign.Controllers;
 using DocuSign.Interfaces;
 using DocuSign.Models;
+using Domain.Interfaces;
 using FakeItEasy;
 using FluentAssertions;
 
 namespace DocuSign.UnitTests
 {
-	public class UserRepositoryTests
+    public class UserRepositoryTests
 	{
         private readonly IStorage _storage;
         private readonly IUserStorageMapper _storageMapper;

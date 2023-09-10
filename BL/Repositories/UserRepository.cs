@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
-using DAL.Intefaces;
 using DocuSign.Interfaces;
 using DocuSign.Models;
 using Domain.Constants;
 using Domain.Exceptions;
+using Domain.Interfaces;
 
 namespace BL.Repositories
 {
