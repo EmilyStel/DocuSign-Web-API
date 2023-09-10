@@ -37,7 +37,6 @@ namespace DocuSign.Controllers
         {
             try
             {
-                _logger.LogInformation("Log message in the About() method");
                 return Ok(_userRepository.GetUsers());
             }
             catch (Exception e)
@@ -56,7 +55,7 @@ namespace DocuSign.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(this.ModelState);
+                return StatusCode(400, e.Message);
             }
         }
 

@@ -17,14 +17,12 @@ namespace DocuSign.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUserUri([FromBody] AddURIDto body, [FromHeader(Name = "userName")] string userName)
+        public IActionResult AddUserUri([FromBody] AddURIDto uri, [FromHeader(Name = "userName")] string userName)
         {
             try
             {
-                _uriRepository.AddUserUri(userName, body.UriName, body.Url);
-                AddUserUriResponse response = new AddUserUriResponse(body.Url, userName);
-
-                return Ok(response);
+                _uriRepository.AddUserUri(userName, uri.UriName, uri.Url);
+                return Ok(new AddUserUriResponse(uri.Url, userName));
 
             } catch(Exception e)
             {
@@ -48,7 +46,7 @@ namespace DocuSign.Controllers
         }
 
         [HttpGet("/uris")]
-        public IActionResult DeleteUserUri([FromHeader(Name = "userName")] string userName)
+        public IActionResult GetUserUris([FromHeader(Name = "userName")] string userName)
         {
             try
             {
@@ -66,7 +64,7 @@ namespace DocuSign.Controllers
             try
             {
                 _uriRepository.ConnectUser(userName, url);
-                return Ok(url);
+                return Ok();
             }
             catch (Exception e)
             {
