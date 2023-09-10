@@ -3,6 +3,7 @@ using System.Text.Json;
 using DAL.Intefaces;
 using DocuSign.Interfaces;
 using DocuSign.Models;
+using Domain.Constants;
 using Domain.Exceptions;
 
 namespace BL.Repositories
@@ -25,12 +26,12 @@ namespace BL.Repositories
 
             if (userId != null)
             {
-                throw new AlreadyExistException("User name");
+                throw new AlreadyExistException(Entities.USER_NAME);
             }
 
             if (!new EmailAddressAttribute().IsValid(email))
             {
-                throw new InvalidException("Email");
+                throw new InvalidException(Entities.EMAIL);
             }
 
             User user = new(name, lastName, email);
@@ -44,7 +45,7 @@ namespace BL.Repositories
         public void DeleteUser(string name)
         {
             string userId = _storageMapper.DeleteIdByName(name) ??
-                throw new NotFoundException("User");
+                throw new NotFoundException(Entities.USER);
 
             _storage.DeleteData(userId);
         }
@@ -52,7 +53,7 @@ namespace BL.Repositories
         public User GetUser(string name)
         {
             string userId = _storageMapper.GetIdByName(name) ??
-                throw new NotFoundException("User");
+                throw new NotFoundException(Entities.USER);
 
             byte[] userDataBytes = _storage.GetData(userId);
 

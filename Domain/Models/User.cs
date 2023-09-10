@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Domain.Constants;
 using Domain.Exceptions;
 
 namespace DocuSign.Models
@@ -20,7 +21,8 @@ namespace DocuSign.Models
 
         public static User Deserialize(byte[] userDataBytes)
         {
-            return JsonSerializer.Deserialize<User>(userDataBytes) ?? throw new InvalidException("User");
+            return JsonSerializer.Deserialize<User>(userDataBytes) ??
+                throw new InvalidException(Entities.USER);
 
         }
     }

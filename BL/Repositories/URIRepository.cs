@@ -4,6 +4,7 @@ using DAL.Intefaces;
 using DocuSign.Interfaces;
 using DocuSign.Models;
 using Domain.Exceptions;
+using Domain.Constants;
 
 namespace BL.Repositories
 {
@@ -23,11 +24,11 @@ namespace BL.Repositories
         public URI AddUserUri(string userName, string uriName, string url)
         {
             string userId = _userStorageMapper.GetIdByName(userName) ??
-                throw new NotFoundException("User");
+                throw new NotFoundException(Entities.USER);
 
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
-                throw new InvalidException("URL");
+                throw new InvalidException(Entities.URL);
             }
 
             URI? uri = _uriStorageMapper.GetUriByName(uriName);
@@ -36,12 +37,12 @@ namespace BL.Repositories
             {
                 if(uri.Url != url)
                 {
-                    throw new AlreadyExistException("URI name");
+                    throw new AlreadyExistException(Entities.URI_NAME);
                 }
 
                 if (uri.Users.Contains(userName))
                 {
-                    throw new AlreadyExistException("URI");
+                    throw new AlreadyExistException(Entities.URI);
                 }
 
                 uri.Users.Add(userName);
@@ -60,7 +61,7 @@ namespace BL.Repositories
                 _uriStorageMapper.CreateUri(uri);
 
                 string id = _userStorageMapper.GetIdByName(userName) ??
-                    throw new NotFoundException("User");
+                    throw new NotFoundException(Entities.USER);
 
                 byte[] userDataBytes = _storage.GetData(id);
                 User deserializedUser = User.Deserialize(userDataBytes);
@@ -76,17 +77,17 @@ namespace BL.Repositories
         public void DeleteUserUri(string userName, string uriName)
         {
             string userId = _userStorageMapper.GetIdByName(userName) ??
-                throw new NotFoundException("User");
+                throw new NotFoundException(Entities.USER);
 
             URI uri = _uriStorageMapper.GetUriByName(uriName) ??
-                throw new NotFoundException("Uri name");
+                throw new NotFoundException(Entities.URI_NAME);
 
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = User.Deserialize(userDataBytes);
 
             if (!deserializedUser.Urls.Contains(uri.Url))
             {
-                throw new NotFoundException("Uri name");
+                throw new NotFoundException(Entities.URI_NAME);
             }
 
             deserializedUser.Urls.Remove(uri.Url);
@@ -102,7 +103,7 @@ namespace BL.Repositories
         public List<string> GetUserUris(string userName)
         {
             string userId = _userStorageMapper.GetIdByName(userName) ??
-                    throw new NotFoundException("User");
+                    throw new NotFoundException(Entities.USER);
 
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = User.Deserialize(userDataBytes);
@@ -113,14 +114,14 @@ namespace BL.Repositories
         public void ConnectUser(string userName, string url)
         {
             string userId = _userStorageMapper.GetIdByName(userName) ??
-                throw new NotFoundException("User");
+                throw new NotFoundException(Entities.USER);
 
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = User.Deserialize(userDataBytes);
 
             if (!deserializedUser.Urls.Contains(url))
             {
-                throw new NotFoundException("Url");
+                throw new NotFoundException(Entities.URL);
             }
 
             Process.Start(new ProcessStartInfo

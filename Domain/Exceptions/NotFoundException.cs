@@ -1,10 +1,9 @@
-﻿using System;
-namespace Domain.Exceptions
+﻿namespace Domain.Exceptions
 {
     public class NotFoundException : Exception
     {
         public NotFoundException(string entity)
-        : base($"{entity} not found")
+        : base($"{entity} {Messages.NOT_FOUND}")
         {
         }
     }

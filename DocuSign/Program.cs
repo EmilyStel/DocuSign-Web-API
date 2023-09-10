@@ -32,26 +32,6 @@ public class Program
 
         app.UseMiddleware<ExceptionMiddleware>();
 
-        //app.UseExceptionHandler(exceptionHandlerApp =>
-        //{
-        //    exceptionHandlerApp.Run(async context =>
-        //    {
-        //        var exception = context.Features.Get<IExceptionHandlerPathFeature>();
-
-        //        context.Response.ContentType = "application/json";
-        //        var result = JsonSerializer.Serialize(new { error = exception.Error.Message });
-
-        //        context.Response.StatusCode = exception.Error switch
-        //        {
-        //            NotFoundException => (int)HttpStatusCode.NotFound,
-        //            AlreadyExistException => (int)HttpStatusCode.Conflict,
-        //            InvalidException => (int)HttpStatusCode.BadRequest,
-        //            _ => (int)HttpStatusCode.InternalServerError,
-        //        };
-        //        await context.Response.WriteAsync(result);
-        //    });
-        //});
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -63,8 +43,6 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
-        //app.UseExceptionHandler("/api/error");
 
         app.Run();
     }
