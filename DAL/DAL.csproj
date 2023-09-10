@@ -21,10 +21,4 @@
     </ProjectReference>
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Interfaces\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
 </Project>
