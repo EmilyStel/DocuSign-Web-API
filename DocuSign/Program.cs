@@ -1,9 +1,9 @@
 ﻿using Domain.Interfaces;
 using BL.Repositories;
 using DAL;
-using DocuSign.Api;
-using DocuSign.Api.Middleware;
 using DocuSign.Api.Controllers.Filters;
+using DAL.Intefaces;
+using Serilog;
 
 namespace DocuSign;
 
@@ -14,13 +14,12 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services.AddControllers();
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IURIRepository, URIRepository>();
-        builder.Services.AddScoped<IStorage, Storage>();
-        builder.Services.AddScoped<IUserStorageMapper, UserStorageMapper>();
-        builder.Services.AddScoped<IURIStorageMapper, URIStorageMapper>();
+        builder.Services.AddSingleton<IUserRepository, UserRepository>();
+        builder.Services.AddSingleton<IURIRepository, URIRepository>();
+        builder.Services.AddSingleton<IStorage, Storage>();
+        builder.Services.AddSingleton<IUserStorageMapper, UserStorageMapper>();
+        builder.Services.AddSingleton<IURIStorageMapper, URIStorageMapper>();
 
         builder.Services.AddControllers(options => options.Filters.Add<ErrorHandlingFilterAttribute>());
 
@@ -28,10 +27,14 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Host.UseSerilog((context, configuration) =>
+        {
+            configuration.ReadFrom.Configuration(context.Configuration);
+        });
+
         var app = builder.Build();
 
         //app.UseMiddleware<ErrorHandlingMiddleware>();
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

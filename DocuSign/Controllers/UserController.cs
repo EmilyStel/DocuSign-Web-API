@@ -11,10 +11,12 @@ namespace DocuSign.Controllers
 	public class UserController : Controller
 	{
         private readonly IUserRepository _userRepository;
+        public ILogger _logger;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, ILogger<UserController> logger)
 		{
             _userRepository = userRepository;
+            _logger = logger;
         }
 
 		[HttpGet("{userName}")]
@@ -35,6 +37,7 @@ namespace DocuSign.Controllers
         {
             try
             {
+                _logger.LogInformation("Log message in the About() method");
                 return Ok(_userRepository.GetUsers());
             }
             catch (Exception e)

@@ -40,7 +40,7 @@
     "DocuSign.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:24581;http://localhost:37798",
+      "applicationUrl": "https://localhost:30656;http://localhost:57169",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
