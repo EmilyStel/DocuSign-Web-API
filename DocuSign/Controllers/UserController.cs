@@ -1,7 +1,6 @@
 ﻿using DocuSign.Dto;
 using Microsoft.AspNetCore.Mvc;
 using DocuSign.Interfaces;
-using Domain.Exceptions;
 
 namespace DocuSign.Controllers
 {
@@ -21,14 +20,7 @@ namespace DocuSign.Controllers
 		[HttpGet("{userName}")]
 		public IActionResult GetUser([FromRoute] string userName)
 		{
-            try
-            {
-                return Ok(_userRepository.GetUser(userName));
-            }
-            catch (Exception e)
-            {
-                return StatusCode(400, e.Message);
-            }
+            return Ok(_userRepository.GetUser(userName));
         }
 
         [HttpGet]
@@ -40,28 +32,14 @@ namespace DocuSign.Controllers
         [HttpPost]
 		public IActionResult CreateUser([FromBody] UserDto user)
 		{
-            try
-            {
-                return Ok(_userRepository.CreateUser(user.Name, user.LastName, user.Email));
-            }
-            catch (Exception e)
-            {
-                return StatusCode(400, e.Message);
-            }
+            return Ok(_userRepository.CreateUser(user.Name, user.LastName, user.Email));
         }
 
         [HttpDelete("{userName}")]
         public IActionResult DeleteUser([FromRoute] string userName)
         {
-            try
-            {
-                _userRepository.DeleteUser(userName);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(400, e.Message);
-            }
+            _userRepository.DeleteUser(userName);
+            return Ok();
         }
     }
 }
