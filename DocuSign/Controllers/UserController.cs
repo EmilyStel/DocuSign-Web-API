@@ -31,7 +31,7 @@ namespace DocuSign.Controllers
             }
         }
 
-        [HttpGet("/user")]
+        [HttpGet]
         public IActionResult GetUsers()
         {
             return Ok(_userRepository.GetUsers()); 
