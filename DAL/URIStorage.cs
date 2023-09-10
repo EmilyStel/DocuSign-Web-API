@@ -5,17 +5,17 @@ using DocuSign.Models;
 namespace DAL
 {
     /// <summary>
-    /// The URIStorageMapper class provides methods to manage URI files.
+    /// The <see cref="URIStorage"/> class provides methods to manage URI files.
     /// </summary>
-    public class URIStorageMapper : IURIStorageMapper
+    public class URIStorage : IURIStorage
     {
         private readonly string _uriStoragePath;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="URIStorageMapper"/> class.
+        /// Initializes a new instance of the <see cref="URIStorage"/> class.
         /// It creates a directory for storing URIs by their names.
         /// </summary>
-        public URIStorageMapper()
+        public URIStorage()
         {
             string tempPath = Path.GetTempPath();
             _uriStoragePath = Path.Combine(tempPath, "SignServiceStorageURLs");

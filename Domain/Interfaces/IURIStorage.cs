@@ -2,7 +2,7 @@
 
 namespace DocuSign.Interfaces
 {
-	public interface IURIStorageMapper
+	public interface IURIStorage
 	{
         public URI? GetUriByName(string name);
         public void DeleteUriByName(string name);

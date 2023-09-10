@@ -18,7 +18,7 @@ public class Program
         builder.Services.AddSingleton<IURIRepository, URIRepository>();
         builder.Services.AddSingleton<IStorage, Storage>();
         builder.Services.AddSingleton<IUserStorageMapper, UserStorageMapper>();
-        builder.Services.AddSingleton<IURIStorageMapper, URIStorageMapper>();
+        builder.Services.AddSingleton<IURIStorage, URIStorage>();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();

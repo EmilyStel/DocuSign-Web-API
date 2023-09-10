@@ -11,13 +11,13 @@ namespace BL.Repositories
     public class URIRepository : IURIRepository
     {
         private readonly IStorage _storage;
-        private readonly IURIStorageMapper _uriStorageMapper;
+        private readonly IURIStorage _uriStorage;
         private readonly IUserStorageMapper _userStorageMapper;
 
-        public URIRepository(IStorage storage, IURIStorageMapper uriStorageMapper, IUserStorageMapper userStorageMapper)
+        public URIRepository(IStorage storage, IURIStorage uriStorage, IUserStorageMapper userStorageMapper)
         {
             _storage = storage;
-            _uriStorageMapper = uriStorageMapper;
+            _uriStorage = uriStorage;
             _userStorageMapper = userStorageMapper;
         }
 
@@ -31,7 +31,7 @@ namespace BL.Repositories
                 throw new InvalidException(Entities.URL);
             }
 
-            URI? uri = _uriStorageMapper.GetUriByName(uriName);
+            URI? uri = _uriStorage.GetUriByName(uriName);
 
             if (uri != null)
             {
@@ -46,7 +46,7 @@ namespace BL.Repositories
                 }
 
                 uri.Users.Add(userName);
-                _uriStorageMapper.CreateUri(uri);
+                _uriStorage.CreateUri(uri);
                 byte[] userDataBytes = _storage.GetData(userId);
                 User deserializedUser = User.Deserialize(userDataBytes);
 
@@ -58,7 +58,7 @@ namespace BL.Repositories
             else
             {
                 uri = new(uriName, url);
-                _uriStorageMapper.CreateUri(uri);
+                _uriStorage.CreateUri(uri);
 
                 string id = _userStorageMapper.GetIdByName(userName) ??
                     throw new NotFoundException(Entities.USER);
@@ -79,7 +79,7 @@ namespace BL.Repositories
             string userId = _userStorageMapper.GetIdByName(userName) ??
                 throw new NotFoundException(Entities.USER);
 
-            URI uri = _uriStorageMapper.GetUriByName(uriName) ??
+            URI uri = _uriStorage.GetUriByName(uriName) ??
                 throw new NotFoundException(Entities.URI_NAME);
 
             byte[] userDataBytes = _storage.GetData(userId);
@@ -96,7 +96,7 @@ namespace BL.Repositories
 
             if (uri.Users.Count == 0)
             {
-                _uriStorageMapper.DeleteUriByName(uriName);
+                _uriStorage.DeleteUriByName(uriName);
             }
         }
 
