@@ -51,7 +51,7 @@ namespace BL.Repositories
                 byte[] userDataBytes = _storage.GetData(userId);
                 User deserializedUser = User.Deserialize(userDataBytes);
 
-                deserializedUser.Urls.Add(url);
+                deserializedUser.Uris.Add(uriName);
 
                 _storage.UpdateData(userId, JsonSerializer.SerializeToUtf8Bytes(deserializedUser));
                 
@@ -68,7 +68,7 @@ namespace BL.Repositories
                 byte[] userDataBytes = _storage.GetData(id);
                 User deserializedUser = User.Deserialize(userDataBytes);
 
-                deserializedUser.Urls.Add(url);
+                deserializedUser.Uris.Add(uriName);
 
                 _storage.UpdateData(id, JsonSerializer.SerializeToUtf8Bytes(deserializedUser));
             }
@@ -87,16 +87,15 @@ namespace BL.Repositories
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = User.Deserialize(userDataBytes);
 
-            if (!deserializedUser.Urls.Contains(uri.Url))
+            if (!deserializedUser.Uris.Contains(uriName))
             {
                 throw new NotFoundException(Entities.URI_NAME);
             }
 
-            deserializedUser.Urls.Remove(uri.Url);
-
+            deserializedUser.Uris.Remove(uriName);
             _storage.UpdateData(userId, JsonSerializer.SerializeToUtf8Bytes(deserializedUser));
 
-            if (uri.Users.Count == 0)
+            if (uri.Users.Count == 1)
             {
                 _uriStorage.DeleteUriByName(uriName);
             }
@@ -110,7 +109,19 @@ namespace BL.Repositories
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = User.Deserialize(userDataBytes);
 
-            return deserializedUser.Urls;
+            List<URI?> uris = deserializedUser.Uris.Select(_uriStorage.GetUriByName).ToList();
+            List<string> urls = new List<string>();
+
+            foreach (URI? uri in uris)
+            {
+                if (uri == null)
+                {
+                    throw new InvalidException(Entities.URI);
+                }
+                urls.Add(uri.Url);
+            }
+
+            return urls;
         }
 
         public void ConnectUser(string userName, string url)
@@ -124,7 +135,19 @@ namespace BL.Repositories
             byte[] userDataBytes = _storage.GetData(userId);
             User deserializedUser = User.Deserialize(userDataBytes);
 
-            if (!deserializedUser.Urls.Contains(decodedUrl))
+            List<URI?> uris = deserializedUser.Uris.Select(_uriStorage.GetUriByName).ToList();
+            List<string> urls = new List<string>();
+
+            foreach (URI? uri in uris)
+            {
+                if (uri == null)
+                {
+                    throw new InvalidException(Entities.URI);
+                }
+                urls.Add(uri.Url);
+            }
+
+            if (!urls.Contains(decodedUrl))
             {
                 throw new NotFoundException(Entities.URL);
             }

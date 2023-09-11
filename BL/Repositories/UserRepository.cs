@@ -1,12 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
-using DAL;
 using DocuSign.Interfaces;
 using DocuSign.Models;
 using Domain.Constants;
 using Domain.Exceptions;
 using Domain.Interfaces;
+using Domain.Models;
 
 namespace BL.Repositories
 {
@@ -24,7 +23,7 @@ namespace BL.Repositories
 
         }
 
-        public User CreateUser(string name, string lastName, string email)
+        public UserResponse CreateUser(string name, string lastName, string email)
         {
             string? userId = _userStorageMapper.GetIdByName(name);
 
@@ -43,7 +42,7 @@ namespace BL.Repositories
 
             _userStorageMapper.CreateUser(user, userId);
 
-            return user;
+            return new(name, lastName, email);
         }
 
         public void DeleteUser(string name)
@@ -51,17 +50,46 @@ namespace BL.Repositories
             string userId = _userStorageMapper.DeleteIdByName(name) ??
                 throw new NotFoundException(Entities.USER);
 
+            byte[] userDataBytes = _storage.GetData(userId);
+            User deserializedUser = User.Deserialize(userDataBytes);
+            List<URI?> uris = deserializedUser.Uris.Select(_uriStorage.GetUriByName).ToList();
+
+            foreach (URI? uri in uris)
+            {
+                if(uri == null)
+                {
+                    throw new InvalidException(Entities.URI);
+                }
+                if (uri.Users.Count == 1 )
+                {
+                    _uriStorage.DeleteUriByName(uri.Name);
+                }
+            }
+
             _storage.DeleteData(userId);
         }
 
-        public User GetUser(string name)
+        public UserResponse GetUser(string name)
         {
             string userId = _userStorageMapper.GetIdByName(name) ??
                 throw new NotFoundException(Entities.USER);
 
             byte[] userDataBytes = _storage.GetData(userId);
 
-            return User.Deserialize(userDataBytes);
+            User deserializedUser = User.Deserialize(userDataBytes);
+            List<URI?> uris = deserializedUser.Uris.Select(_uriStorage.GetUriByName).ToList();
+            List<string> urls = new List<string>();
+
+            foreach (URI? uri in uris)
+            {
+                if (uri == null)
+                {
+                    throw new InvalidException(Entities.URI);
+                }
+                urls.Add(uri.Url);
+            }
+
+            return new UserResponse(deserializedUser.Name, deserializedUser.LastName, deserializedUser.Email, urls);
         }
 
         public List<string> GetUsers()

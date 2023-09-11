@@ -1,6 +1,6 @@
 ﻿using DocuSign.Dto;
 using DocuSign.Interfaces;
-using DocuSign.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocuSign.Controllers

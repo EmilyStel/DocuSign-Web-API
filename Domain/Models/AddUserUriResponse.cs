@@ -1,4 +1,4 @@
-﻿namespace DocuSign.Models
+﻿namespace Domain.Models
 {
 	public class AddUserUriResponse
 	{
