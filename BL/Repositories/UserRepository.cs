@@ -1,5 +1,7 @@
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using DAL;
 using DocuSign.Interfaces;
 using DocuSign.Models;
 using Domain.Constants;
@@ -12,12 +14,14 @@ namespace BL.Repositories
     {
         private readonly IStorage _storage;
         private readonly IUserStorageMapper _userStorageMapper;
+        private readonly IURIStorage _uriStorage;
 
-
-        public UserRepository(IStorage storage, IUserStorageMapper storageMapper)
+        public UserRepository(IStorage storage, IUserStorageMapper userStorageMapper, IURIStorage uriStorage)
         {
             _storage = storage;
-            _userStorageMapper = storageMapper;
+            _userStorageMapper = userStorageMapper;
+            _uriStorage = uriStorage;
+
         }
 
         public User CreateUser(string name, string lastName, string email)
